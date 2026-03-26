@@ -59,18 +59,39 @@ def plot_cf2_did_eta(df: pd.DataFrame, out_path: Path) -> None:
 
 
 def plot_cf3_null_heatmap(df: pd.DataFrame, out_path: Path) -> None:
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
+    fig, axes = plt.subplots(1, 2, figsize=(14.5, 5.6), gridspec_kw={"wspace": 0.55})
     piv = df.pivot_table(index="dataset", columns="rank", values="bound_ratio_delta_over_Aalpha_eK", aggfunc="mean")
-    sns.heatmap(piv, annot=True, fmt=".2f", cmap="viridis", cbar_kws={"label": "Bound Ratio"}, ax=axes[0])
+    sns.heatmap(
+        piv,
+        annot=True,
+        fmt=".2f",
+        cmap="viridis",
+        annot_kws={"size": 9},
+        cbar_kws={"label": "Bound Ratio", "fraction": 0.08, "pad": 0.03},
+        ax=axes[0],
+    )
     axes[0].set_xlabel("PCA Components (count)")
     axes[0].set_ylabel("Dataset")
     axes[0].set_title("Bound Ratio by Dataset/Rank")
+    axes[0].tick_params(axis="x", labelrotation=0, labelsize=10)
+    axes[0].tick_params(axis="y", labelsize=10)
 
     piv2 = df.pivot_table(index="dataset", columns="rank", values="delta_accuracy_nonent_vs_emulator", aggfunc="mean")
-    sns.heatmap(piv2, annot=True, fmt=".3f", cmap="coolwarm", center=0.0, cbar_kws={"label": "Delta Accuracy"}, ax=axes[1])
+    sns.heatmap(
+        piv2,
+        annot=True,
+        fmt=".3f",
+        cmap="coolwarm",
+        center=0.0,
+        annot_kws={"size": 9},
+        cbar_kws={"label": "Delta Accuracy", "fraction": 0.08, "pad": 0.03},
+        ax=axes[1],
+    )
     axes[1].set_xlabel("PCA Components (count)")
-    axes[1].set_ylabel("Dataset")
+    axes[1].set_ylabel("")
     axes[1].set_title("Non-Entangling Delta vs Emulator")
+    axes[1].tick_params(axis="x", labelrotation=0, labelsize=10)
+    axes[1].tick_params(axis="y", labelleft=False, left=False)
 
     fig.tight_layout()
     fig.savefig(out_path, format="pdf", bbox_inches="tight")
