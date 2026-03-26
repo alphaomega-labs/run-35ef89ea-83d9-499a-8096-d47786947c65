@@ -1,0 +1,502 @@
+[
+  {
+    "assumptions": [
+      "Reservoir dynamics/feature map fixed while readout is optimized classically.",
+      "Observable choice strongly controls downstream classification quality."
+    ],
+    "citation": "Gross, M.; Rieser, H.-M. Kernel-based optimization of measurement operators for quantum reservoir computers (2026). https://arxiv.org/abs/2602.14677",
+    "claims": [
+      "Measurement-operator optimization can materially improve QRC performance relative to unoptimized observable sets."
+    ],
+    "conclusions": [
+      "Readout observable design is a first-order driver of QRC utility."
+    ],
+    "contributions": [
+      "Formulates operator-selection objective coupled to kernel/readout quality.",
+      "Provides empirical gains on representative tasks."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "equation",
+        "confidence": "high",
+        "content": "Closed-form ridge readout uses w* = (Phi^T Phi + lambda I)^(-1) Phi^T y.",
+        "locator": "readout optimization section",
+        "source_ref": "https://arxiv.org/abs/2602.14677"
+      },
+      {
+        "atom_type": "claim",
+        "confidence": "high",
+        "content": "Observable-set optimization yields measurable gains over fixed operator choices.",
+        "locator": "results/discussion",
+        "source_ref": "https://arxiv.org/abs/2602.14677"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "high",
+    "future_work": [
+      "Evaluate optimized-operator transferability across reservoirs/noise settings."
+    ],
+    "key_equations": [
+      "w* = (Phi^T Phi + lambda I)^(-1) Phi^T y"
+    ],
+    "limitations": [
+      "Preprint status; broader cross-hardware validation is still needed."
+    ],
+    "parameters": [
+      "ridge regularization lambda",
+      "observable subset cardinality"
+    ],
+    "procedures": [
+      "Construct reservoir feature matrix Phi from measured observables.",
+      "Solve regularized linear readout and compare against baseline operator sets."
+    ],
+    "provenance_notes": [
+      "Full-text extracted from materialized PDF in workspace resources/knowledge store."
+    ],
+    "source_type": "paper",
+    "summary": "Introduces kernel-guided measurement-operator optimization for QRC readouts and shows improved performance on benchmark tasks, directly informing observable-ablation design.",
+    "title": "Kernel-based optimization of measurement operators for quantum reservoir computers",
+    "url": "https://arxiv.org/abs/2602.14677",
+    "year": 2026
+  },
+  {
+    "assumptions": [
+      "QELM performance should be interpreted jointly with simulability/resource costs.",
+      "Entanglement alone is not a sufficient proxy for practical advantage."
+    ],
+    "citation": "Entanglement and Classical Simulability in Quantum Extreme Learning Machines (2025). https://arxiv.org/abs/2509.06873",
+    "claims": [
+      "Entanglement-related gains depend on task structure and classical comparators."
+    ],
+    "conclusions": [
+      "Entanglement must be analyzed with explicit baseline parity and computational-cost context."
+    ],
+    "contributions": [
+      "Connects entanglement structure to expressivity/simulability considerations in extreme-learning quantum models."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "claim",
+        "confidence": "medium",
+        "content": "Entanglement should be interpreted through the lens of classical simulability and comparator strength.",
+        "locator": "discussion/conclusion",
+        "source_ref": "https://arxiv.org/abs/2509.06873"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "medium",
+    "future_work": [
+      "Broader empirical studies across datasets and reservoir families."
+    ],
+    "key_equations": [],
+    "limitations": [
+      "Preprint and task-dependent conclusions; external replication still required."
+    ],
+    "parameters": [
+      "entangling-depth controls",
+      "simulability regime descriptors"
+    ],
+    "procedures": [
+      "Compare model behavior across entangled and weakly/non-entangled configurations with classical baselines."
+    ],
+    "provenance_notes": [
+      "Full-text seed PDF from workspace resources."
+    ],
+    "source_type": "paper",
+    "summary": "Studies how entanglement and classical simulability interact in QELM-style models, providing direct framing for with/without-entanglement ablations.",
+    "title": "Entanglement and Classical Simulability in Quantum Extreme Learning Machines",
+    "url": "https://arxiv.org/abs/2509.06873",
+    "year": 2025
+  },
+  {
+    "assumptions": [
+      "Analog dynamics can provide rich temporal features for reservoir readouts."
+    ],
+    "citation": "Large-scale quantum reservoir learning with an analog quantum computer (2024). https://arxiv.org/abs/2407.02553",
+    "claims": [
+      "Analog QRC can achieve competitive task performance with appropriate readout training."
+    ],
+    "conclusions": [
+      "Hardware-native analog reservoirs are viable candidates for practical QRC pipelines."
+    ],
+    "contributions": [
+      "Large-scale analog reservoir demonstration with classification/learning evidence."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "procedure",
+        "confidence": "medium",
+        "content": "Hardware reservoir observables are used as features for supervised readout training.",
+        "locator": "method/results",
+        "source_ref": "https://arxiv.org/abs/2407.02553"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "medium",
+    "future_work": [
+      "Cross-platform replication and standardized baseline protocols."
+    ],
+    "key_equations": [],
+    "limitations": [
+      "Task/hardware specificity may limit direct transfer to digital-simulation settings."
+    ],
+    "parameters": [
+      "reservoir size",
+      "measurement/readout configuration"
+    ],
+    "procedures": [
+      "Collect observable trajectories from analog reservoir and train classical readout."
+    ],
+    "provenance_notes": [
+      "Missing seed in early run; fetched and integrated during retry."
+    ],
+    "source_type": "paper",
+    "summary": "Provides large-scale analog-QRC evidence relevant to realistic comparator choices and hardware-informed protocol design.",
+    "title": "Large-scale quantum reservoir learning with an analog quantum computer",
+    "url": "https://arxiv.org/abs/2407.02553",
+    "year": 2024
+  },
+  {
+    "assumptions": [
+      "Fixed random or predefined quantum feature maps paired with classical readout are sufficient to evaluate QELM behavior."
+    ],
+    "citation": "Harnessing Quantum Extreme Learning Machines for image classification (2024). https://arxiv.org/abs/2409.00998",
+    "claims": [
+      "QELM can achieve strong image-task performance under suitable encoding/readout choices."
+    ],
+    "conclusions": [
+      "Image preprocessing and encoding choices substantially mediate observed gains."
+    ],
+    "contributions": [
+      "QELM image-classification benchmark framing and protocol details."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "claim",
+        "confidence": "high",
+        "content": "Performance depends critically on encoding and readout design in image-classification settings.",
+        "locator": "results/discussion",
+        "source_ref": "https://arxiv.org/abs/2409.00998"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "high",
+    "future_work": [
+      "Evaluate on more difficult datasets where PCA separability is weaker."
+    ],
+    "key_equations": [],
+    "limitations": [
+      "Results can be sensitive to dataset easiness and preprocessing discriminability."
+    ],
+    "parameters": [
+      "number of encoded components",
+      "observable set",
+      "readout regularization"
+    ],
+    "procedures": [
+      "Encode image-derived features to quantum states and train linear/classical readout."
+    ],
+    "provenance_notes": [
+      "Primary seed materialized in workspace/resources."
+    ],
+    "source_type": "paper",
+    "summary": "Image-classification-focused QELM work that informs PCA-feature pipeline design and comparator selection for this project.",
+    "title": "Harnessing Quantum Extreme Learning Machines for image classification",
+    "url": "https://arxiv.org/abs/2409.00998",
+    "year": 2024
+  },
+  {
+    "assumptions": [
+      "Reservoir representations can improve robustness under structured task noise/distribution effects."
+    ],
+    "citation": "Robust Quantum Reservoir Computing for Molecular Property Prediction (2024). https://arxiv.org/abs/2412.06758",
+    "claims": [
+      "QRC configurations with suitable readout/observable design improve robustness metrics."
+    ],
+    "conclusions": [
+      "Robustness analysis is necessary alongside headline accuracy comparisons."
+    ],
+    "contributions": [
+      "Introduces robustness-focused QRC evaluation framing on molecular targets."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "limitation",
+        "confidence": "medium",
+        "content": "Task-domain specificity limits direct transfer to image-classification claims.",
+        "locator": "discussion",
+        "source_ref": "https://arxiv.org/abs/2412.06758"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "medium",
+    "future_work": [
+      "Cross-domain robustness validation and stronger baseline expansions."
+    ],
+    "key_equations": [],
+    "limitations": [
+      "Domain shift from image to molecular tasks requires careful transfer of conclusions."
+    ],
+    "parameters": [
+      "reservoir hyperparameters",
+      "observable/readout settings"
+    ],
+    "procedures": [
+      "Train/test robustness-focused prediction with ablations over reservoir/readout settings."
+    ],
+    "provenance_notes": [
+      "Fetched and integrated during retry from user-cited link."
+    ],
+    "source_type": "paper",
+    "summary": "QRC robustness study with protocol-level choices useful for baseline rigor and ablation planning.",
+    "title": "Robust Quantum Reservoir Computing for Molecular Property Prediction",
+    "url": "https://arxiv.org/abs/2412.06758",
+    "year": 2024
+  },
+  {
+    "assumptions": [
+      "Quantum feature maps induce kernels whose utility is judged by alignment and generalization behavior."
+    ],
+    "citation": "Huang, H.-Y.; Kueng, R.; Preskill, J. Supervised quantum machine learning models are kernel methods (2021). https://arxiv.org/abs/2101.11020",
+    "claims": [
+      "Generalization behavior of quantum models can be analyzed via associated kernels."
+    ],
+    "conclusions": [
+      "Kernel-theoretic diagnostics are central for fair quantum-vs-classical comparison."
+    ],
+    "contributions": [
+      "Formalizes broad supervised QML models as kernel methods."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "equation",
+        "confidence": "high",
+        "content": "Supervised predictor represented in kernel expansion form f(x) = sum_i alpha_i K(x,x_i).",
+        "locator": "kernel formulation sections",
+        "source_ref": "https://arxiv.org/abs/2101.11020"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "high",
+    "future_work": [
+      "Sharper criteria for practical advantage under realistic data/noise regimes."
+    ],
+    "key_equations": [
+      "f(x) = sum_i alpha_i K(x, x_i)"
+    ],
+    "limitations": [
+      "Kernel advantage may diminish if classical kernels can emulate effective feature maps."
+    ],
+    "parameters": [
+      "kernel matrix K",
+      "regularization of dual coefficients alpha"
+    ],
+    "procedures": [
+      "Map quantum models to induced kernels and evaluate generalization-relevant properties."
+    ],
+    "provenance_notes": [
+      "Seed paper in workspace resources; full-text used for extraction."
+    ],
+    "source_type": "paper",
+    "summary": "Foundational kernel perspective for supervised QML; supports interpreting QRC/QELM features through effective kernels and baseline parity.",
+    "title": "Supervised quantum machine learning models are kernel methods",
+    "url": "https://arxiv.org/abs/2101.11020",
+    "year": 2021
+  },
+  {
+    "assumptions": [
+      "Expressivity depends strongly on encoding map, not only trainable ansatz depth."
+    ],
+    "citation": "Perez-Salinas, A.; Cervera-Lierta, A.; Gil-Fuster, E.; Latorre, J. I. The effect of data encoding on the expressive power of variational quantum machine learning models (2020). https://arxiv.org/abs/2008.08605",
+    "claims": [
+      "Data encoding can dominate model expressivity and separability behavior."
+    ],
+    "conclusions": [
+      "Encoding choice must be controlled before attributing gains to quantum dynamics."
+    ],
+    "contributions": [
+      "Analyzes how encoding choices alter reachable function classes in variational QML."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "claim",
+        "confidence": "high",
+        "content": "Encoding strategy is a principal determinant of expressivity in quantum ML models.",
+        "locator": "analysis sections",
+        "source_ref": "https://arxiv.org/abs/2008.08605"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "high",
+    "future_work": [
+      "Task-adaptive encoding design and tighter theory-practice links."
+    ],
+    "key_equations": [],
+    "limitations": [
+      "Findings may vary by task family and model architecture."
+    ],
+    "parameters": [
+      "encoding map family",
+      "feature-to-angle scaling"
+    ],
+    "procedures": [
+      "Compare expressivity/separability across alternative encoding constructions."
+    ],
+    "provenance_notes": [
+      "Primary seed in workspace resources."
+    ],
+    "source_type": "paper",
+    "summary": "Shows encoding strategy is a dominant driver of expressive power, directly motivating PCA-component and angle-encoding sweeps.",
+    "title": "The effect of data encoding on the expressive power of variational quantum machine learning models",
+    "url": "https://arxiv.org/abs/2008.08605",
+    "year": 2020
+  },
+  {
+    "assumptions": [
+      "Pauli-transfer representation captures relevant linearized channel effects for interpretability."
+    ],
+    "citation": "Theory and interpretability of Quantum Extreme Learning Machines: a Pauli-transfer matrix approach (2026). https://arxiv.org/abs/2602.18377",
+    "claims": [
+      "PTM decomposition enables clearer attribution of feature transformation behavior."
+    ],
+    "conclusions": [
+      "Interpretability improves when dynamics are analyzed via transfer-matrix structure."
+    ],
+    "contributions": [
+      "Introduces PTM-based interpretability tools for QELM feature transformations."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "equation",
+        "confidence": "medium",
+        "content": "State/channel action represented via Pauli-transfer matrix mapping vec(rho_out) = T vec(rho_in).",
+        "locator": "formalism section",
+        "source_ref": "https://arxiv.org/abs/2602.18377"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "medium",
+    "future_work": [
+      "Link PTM interpretability metrics to empirical generalization behavior."
+    ],
+    "key_equations": [
+      "vec(rho_out) = T vec(rho_in)"
+    ],
+    "limitations": [
+      "Approximation quality and interpretability detail can be regime-dependent."
+    ],
+    "parameters": [
+      "Pauli basis truncation",
+      "channel/operator coefficients"
+    ],
+    "procedures": [
+      "Map QELM transformations into PTM form and analyze component contributions."
+    ],
+    "provenance_notes": [
+      "Added during retry with equation-level extraction."
+    ],
+    "source_type": "paper",
+    "summary": "Provides PTM-based formalism to interpret QELM mappings, useful for feature-map-with/without-entanglement analysis.",
+    "title": "Theory and interpretability of Quantum Extreme Learning Machines: a Pauli-transfer matrix approach",
+    "url": "https://arxiv.org/abs/2602.18377",
+    "year": 2026
+  },
+  {
+    "assumptions": [
+      "Reservoir configurations induce explicit trade-offs between memory capacity and nonlinear separability."
+    ],
+    "citation": "Memory-Nonlinearity Trade-off across Quantum Reservoir Computing Frameworks (2026). https://arxiv.org/abs/2603.21371",
+    "claims": [
+      "No single reservoir setting dominates both memory and nonlinearity objectives."
+    ],
+    "conclusions": [
+      "Evaluation must include trade-off-aware metrics, not only scalar accuracy."
+    ],
+    "contributions": [
+      "Provides comparative framework for memory-nonlinearity behavior in QRC."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "claim",
+        "confidence": "medium",
+        "content": "Memory and nonlinearity objectives trade off across QRC frameworks and settings.",
+        "locator": "comparative analysis",
+        "source_ref": "https://arxiv.org/abs/2603.21371"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "medium",
+    "future_work": [
+      "Joint optimization strategies under hardware/compute constraints."
+    ],
+    "key_equations": [],
+    "limitations": [
+      "Trade-off frontiers can shift with dataset and encoding specifics."
+    ],
+    "parameters": [
+      "reservoir dynamics parameters",
+      "memory/nonlinearity metrics"
+    ],
+    "procedures": [
+      "Sweep framework settings and estimate memory/nonlinearity response."
+    ],
+    "provenance_notes": [
+      "Added in retry pass for protocol-level guidance."
+    ],
+    "source_type": "paper",
+    "summary": "Characterizes memory vs nonlinearity trade-offs across QRC variants, directly informing reservoir hyperparameter sweeps and negative-result interpretation.",
+    "title": "Memory-Nonlinearity Trade-off across Quantum Reservoir Computing Frameworks",
+    "url": "https://arxiv.org/abs/2603.21371",
+    "year": 2026
+  },
+  {
+    "assumptions": [
+      "Delay embeddings improve temporal representation in quantum extreme learning settings."
+    ],
+    "citation": "Efficient time-series prediction on NISQ devices via time-delayed quantum extreme learning machine (2026). https://arxiv.org/abs/2602.21544",
+    "claims": [
+      "Time-delayed construction improves temporal prediction quality under resource constraints."
+    ],
+    "conclusions": [
+      "Delay-augmented QELM is a practical option for NISQ-compatible forecasting."
+    ],
+    "contributions": [
+      "Introduces time-delayed QELM with NISQ-oriented efficiency analysis."
+    ],
+    "evidence_atoms": [
+      {
+        "atom_type": "equation",
+        "confidence": "medium",
+        "content": "Time-delayed hidden-state update includes lagged state terms h_{t-tau}.",
+        "locator": "model equations",
+        "source_ref": "https://arxiv.org/abs/2602.21544"
+      }
+    ],
+    "extraction_completeness": "substantial",
+    "extraction_confidence": "medium",
+    "future_work": [
+      "Cross-domain adaptation and stronger baseline harmonization."
+    ],
+    "key_equations": [
+      "h_t = F_theta(x_t, h_{t-1}, h_{t-tau})"
+    ],
+    "limitations": [
+      "Time-series findings do not transfer automatically to static image tasks."
+    ],
+    "parameters": [
+      "delay tau",
+      "hidden-state dimension"
+    ],
+    "procedures": [
+      "Construct delayed quantum state features and train classical readout for prediction."
+    ],
+    "provenance_notes": [
+      "Added during retry with explicit state-update extraction."
+    ],
+    "source_type": "paper",
+    "summary": "Time-delayed QELM source with explicit update/state equations and protocol details valuable for sequence-style comparator baselines.",
+    "title": "Efficient time-series prediction on NISQ devices via time-delayed quantum extreme learning machine",
+    "url": "https://arxiv.org/abs/2602.21544",
+    "year": 2026
+  }
+]

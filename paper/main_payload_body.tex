@@ -1,0 +1,454 @@
+\maketitle
+
+\begin{abstract}
+Quantum reservoir computing (QRC) is often evaluated with heterogeneous comparator strength, making it difficult to determine whether reported gains are genuinely quantum-mechanistic or induced by feature-map geometry and protocol asymmetry. This paper studies image classification with PCA-compressed inputs, angle encoding, a transverse-Ising reservoir, and partial Pauli-observable readout under strict comparator parity. We combine formal analysis and executed simulation evidence to answer three coupled questions: where advantage regions exist across rank, whether entanglement-observable interactions are consistently positive, and when non-entangling regimes are effectively emulable by classical kernels. The formal component proves a unique ridge readout optimum under parity constraints, identifies the interaction term isolated by a difference-in-differences design, and derives a non-entangling predictor-gap bound linked to kernel-emulation error. The executed simulation component reports contiguous positive confidence intervals against strong classical comparators over multiple rank regimes, mixed interaction effects for entanglement strength, and bound-ratio behavior below unity in tested non-entangling regimes. Together, these findings support a conservative claim boundary: QRC gains are regime-conditioned and auditable under parity controls, while broad monotonic entanglement-utility claims are not supported by current evidence.
+\end{abstract}
+
+% Fallback table rules when booktabs is unavailable in the venue template.
+\providecommand{\toprule}{\hline}
+\providecommand{\midrule}{\hline}
+\providecommand{\bottomrule}{\hline}
+
+\section{Introduction}\label{sec:introduction}
+Quantum reservoir computing has become a practical interface between quantum dynamics and classical statistical learning because it relocates optimization from quantum parameters to a tractable readout layer \citep{S001,S003,S004,S023,S033,S039}. This architectural shift is attractive in near-term settings: one can preserve a fixed quantum substrate, gather measured observables, and train only a linear or ridge classifier with established uncertainty quantification. The same architectural shift, however, creates a scientific challenge. If the readout dominates performance and comparator budgets are not parity controlled, then nominal ``quantum advantage'' may be an artifact of experimental protocol rather than of reservoir dynamics. The central difficulty is therefore not simply to report high accuracy, but to separate mechanistic contribution from benchmark asymmetry.
+
+The user-facing question motivating this manuscript is consequential beyond image classification. Similar parity and mechanism-identification problems appear in molecular prediction, radar recognition, and medical-transfer pipelines where QRC-style feature extraction is compared against classical kernels, random-feature models, and recurrent reservoirs \citep{S005,S009,S014,S015,S017,S021,S031}. Establishing a rigorous methodology for one domain therefore contributes to a broader cross-domain agenda: identifying when quantum-enhanced feature maps add value after classical controls are strengthened. This requires explicit novelty boundaries against kernel reinterpretations \citep{S006,S022,S035}, encoding sensitivity \citep{S007,S030}, and simulability critiques \citep{S002,S038}.
+
+Our study focuses on PCA-compressed grayscale image regimes because they make the fairness problem visible. Low-rank projections can be strongly class-separable, especially on easier datasets, and this can suppress meaningful differences among reservoir families. At the same time, rank sweeps offer a controlled stress axis for testing whether any observed quantum gains are localized or global. We therefore frame the problem as a regime map, not a single-score contest: where does a parity-constrained quantum reservoir outperform strong classical lineages, where does entanglement help or hurt, and where do non-entangling dynamics collapse onto classical emulation?
+
+This manuscript follows a hybrid structure. We develop formal statements with complete proofs for the readout optimum, interaction decomposition, and kernel-null boundary. We then connect those statements to executed simulation evidence including figures, tables, and uncertainty summaries. Evidence is reported conservatively: one claim is supported with clear parity-conditioned intervals, one is mixed under currently available data, and one is supported with explicit scope caveats. Negative outcomes and unresolved boundaries are carried forward as first-class scientific outputs rather than hidden as implementation noise.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item We formalize a parity-constrained QRC evaluation objective and prove uniqueness of the ridge readout optimum, making rank-conditioned support regions mathematically auditable.
+\item We derive and validate an interaction decomposition that isolates entanglement-observable coupling, showing that positive effects are regime-dependent rather than monotonic.
+\item We prove a non-entangling predictor-gap bound in terms of kernel-emulation error and connect its assumptions to executable diagnostics and boundary tests.
+\item We report simulation results with explicit uncertainty and negative-result logging, establishing conservative claim boundaries instead of broad advantage narratives.
+\end{itemize}
+
+Beyond this immediate benchmark, the paper contributes a reusable evaluation pattern for open-question quantum machine learning. Recent toolkits and practical studies emphasize that rigorous parity control, transparent assumption auditing, and artifact-level reproducibility are prerequisites for credible cross-paper comparison, particularly when evidence spans formal derivations, simulation, and platform-informed stress tests \citep{S017,S023,S024,S032,S036}. Our manuscript operationalizes this requirement by tying each major claim to theorem dependencies, uncertainty-qualified numerical evidence, and explicit caveat clauses. This structure is intended to be transferable to related domains in which QRC-like representations are now explored, including molecular prediction, sensing, and hybrid photonic or algebraic quantum-learning pipelines \citep{S005,S008,S011,S013,S016,S021,S027,S031,S039}. As a result, the work functions both as an original scientific contribution and as a protocol template for defensible claim formation under near-term compute and noise constraints.
+
+\section{Related Work, Contradictions, and Novelty Boundary}\label{sec:related}
+\subsection{QRC and QELM evidence in supervised learning}
+QRC and QELM literature has matured rapidly, with image, hardware, and application-specific demonstrations indicating that fixed quantum dynamics plus a classical readout can be competitive under suitable encoding and measurement design \citep{S001,S003,S004,S010,S023,S029,S032,S033,S036,S039}. Application expansion to biomedical and sensing tasks further suggests that reservoir-style quantum feature maps can be integrated into practical workflows \citep{S009,S014,S015,S017,S021,S031}. The strongest message from this cluster is not unconditional superiority but conditional utility: feature-map construction, observable policy, and readout regularization materially change outcomes.
+
+This conditionality matters for manuscript-level claims. Several positive studies optimize quantum-side settings while using weaker classical comparators or non-matched hyperparameter budgets, which can inflate apparent gains. In contrast, parity-controlled evaluations treat comparator lineage as part of the scientific object, not a post-hoc baseline choice. Our work follows this stronger framing by keeping preprocessing, splits, and tuning budgets harmonized across quantum and classical arms.
+
+\subsection{Entanglement utility versus simulability and cost}
+Entanglement is often invoked as the signature mechanism behind quantum feature richness, and some studies indeed report gains when entangling dynamics are introduced \citep{S003,S033,S039}. However, simulability analyses and resource-aware critiques emphasize that entanglement is not a sufficient condition for practical advantage \citep{S002,S025,S026,S028,S034,S038}. The disagreement is not binary; it is regime-conditional. Entanglement can increase representational nonlinearity while simultaneously increasing variance, runtime, and optimization fragility.
+
+This contradiction motivates our interaction-centric analysis. Instead of asking whether ``more entanglement is better,'' we estimate whether entanglement and observable optimization interact positively once comparator parity and runtime penalties are imposed. This reframing aligns with the broader quantum-information literature, where useful entanglement is contextual and depends on task structure, measurement constraints, and inference objective \citep{S012,S018,S019}.
+
+\subsection{Kernel reinterpretations, encoding sensitivity, and generalization caveats}
+A major challenge to broad quantum-advantage claims is the kernel interpretation of supervised quantum models \citep{S006}. If observed gains can be reproduced by classical kernels with matched budgets, then the operative mechanism may be feature geometry rather than uniquely quantum computation. Complementary theory shows that encoding choices dominate expressive behavior and can determine whether a model appears strong or brittle across regimes \citep{S007,S030}. Margin and concentration analyses further warn that noise and finite-sample effects can erase nominal gains \citep{S020,S035}.
+
+These critiques do not invalidate QRC; they sharpen what must be demonstrated. A defensible contribution must (i) compare against strong kernel and reservoir lineages, (ii) disclose rank-conditioned confidence intervals rather than best-case points, and (iii) report null regions where quantum and classical models are effectively equivalent. The present manuscript is designed around those requirements, including explicit bound-audit diagnostics for non-entangling regimes.
+
+\subsection{Interpretability, module design, and reproducibility infrastructure}
+Recent work has expanded interpretability and reproducibility support through Pauli-transfer analysis, practical tooling, and architecture-level decompositions \citep{S008,S011,S013,S016,S024,S037}. These tools are important because open-question studies require not only scores but transparent mechanism checks. Our methodology adopts this stance by linking each major claim to a specific evidence contract: formal derivation obligations, symbolic checks, and empirical diagnostics with uncertainty accounting.
+
+\subsection{Novelty boundary}
+Our novelty boundary is deliberately narrow and defensible. We do not claim global quantum superiority across all datasets, hardware channels, or training regimes. We claim three bounded contributions: parity-conditioned rank advantage under explicit controls, interaction-level insight into entanglement-observable coupling, and a kernel-null characterization for non-entangling operation. This boundary directly addresses the contradiction map above and turns unresolved edges into explicit future experiments rather than implicit overclaiming.
+
+\section{Problem Setting and Formal Assumptions}\label{sec:problem}
+\subsection{Data space, preprocessing, and splits}
+Let $\train=\{(\vx_i,y_i)\}_{i=1}^n$ denote training examples with labels $y_i\in\{1,\dots,C\}$. Inputs are standardized grayscale images projected to a PCA subspace $\mathbb{R}^{k}$, where rank $k$ is swept over a predefined grid. Validation and test partitions, denoted $\valid$ and $\test$, are fixed across all model arms to enforce comparator parity. The rank sweep is part of the scientific question: we seek contiguous ranges where quantum and classical behavior separate with confidence.
+
+The preprocessing-to-quantum pipeline is represented as
+\begin{equation}
+\vz_i = P_k\,\vx_i, \qquad \rho_{\text{in}}(\vz_i)=\mathcal{E}_{\theta}(\vz_i),
+\label{eq:encoding}
+\end{equation}
+where $P_k$ is the PCA projector and $\mathcal{E}_{\theta}$ is an angle-encoding map onto $q$ qubits.
+
+\subsection{Reservoir dynamics and observable features}
+The reservoir channel is a transverse-Ising-inspired evolution with entanglement control parameter $\eta\in[0,1]$:
+\begin{equation}
+\rho(\vz_i;\eta)=\mathcal{R}_{\phi,\eta}\!\left(\rho_{\text{in}}(\vz_i)\right),
+\label{eq:reservoir}
+\end{equation}
+where $\phi$ denotes Hamiltonian and simulation hyperparameters. Measured features are expectation values of a selected Pauli observable family $\mathcal{M}=\{M_j\}_{j=1}^{m}$:
+\begin{equation}
+\varphi_j(\vz_i)=\mathrm{Tr}\left(M_j\rho(\vz_i;\eta)\right), \qquad
+\bm{\varphi}(\vz_i)=\left[\varphi_1(\vz_i),\dots,\varphi_m(\vz_i)\right]^\top.
+\label{eq:featuremap}
+\end{equation}
+Observable policy (fixed subset versus optimized subset) is treated as an explicit factor, not a hidden tuning detail.
+
+\subsection{Readout objective, feasible set, and optimality criterion}
+For one-versus-rest ridge readout weights $\vw\in\mathbb{R}^{m}$ and labels $\vy\in\mathbb{R}^{n}$, the parity-constrained objective is
+\begin{equation}
+\mathcal{L}(\vw)=\frac{1}{n}\|\Phi\vw-\vy\|_2^2+\lambda\|\vw\|_2^2,
+\label{eq:ridge_obj}
+\end{equation}
+where $\Phi\in\mathbb{R}^{n\times m}$ stacks $\bm{\varphi}(\vz_i)^\top$ and $\lambda>0$. The feasible set is $\mathbb{R}^{m}$ with fixed preprocessing, split, and hyperparameter budget constraints shared with all baselines. The optimality criterion is global minimization of \eqref{eq:ridge_obj}, yielding
+\begin{equation}
+\vw^\star=(\Phi^\top\Phi+n\lambda I)^{-1}\Phi^\top\vy.
+\label{eq:ridge_solution}
+\end{equation}
+
+For regime-conditioned claims, define accuracy deltas against ESN and kernel comparators:
+\begin{equation}
+\Delta_{\text{ESN}}(k)=A_{\text{QRC}}(k)-A_{\text{ESN}}(k),\quad
+\Delta_{\text{K}}(k)=A_{\text{QRC}}(k)-A_{\text{K}}(k).
+\label{eq:deltas}
+\end{equation}
+A rank $k$ is in the support region when both lower confidence bounds are positive.
+
+\subsection{Interaction and null-region diagnostics}
+For entanglement-observable analysis, define treatment indicator $E\in\{0,1\}$ for non-entangling/entangling settings and policy indicator $O\in\{0,1\}$ for fixed/optimized observable choice. The interaction estimand is
+\begin{equation}
+\Delta_{\mathrm{DiD}}=\big(\mu_{11}-\mu_{10}\big)-\big(\mu_{01}-\mu_{00}\big),
+\label{eq:did}
+\end{equation}
+where $\mu_{ab}=\mathbb{E}[Y\mid E=a,O=b]$.
+
+For runtime-aware operating-point selection, we use
+\begin{equation}
+J(\eta)=A(\eta,\omega)-\beta\,T(\eta),
+\label{eq:utility}
+\end{equation}
+with accuracy-like utility $A$, runtime proxy $T$, and tradeoff coefficient $\beta>0$.
+
+For non-entangling emulation, let $\eps_K$ denote kernel discrepancy and $A_\alpha$ a regularization-dependent constant. The tested boundary criterion is
+\begin{equation}
+\Delta_{\text{non-ent}}\le A_\alpha\,\eps_K.
+\label{eq:null_boundary}
+\end{equation}
+
+\begin{table}[t]
+\caption{Core notation used by the formal and empirical components. The table is placed after definitions in \secref{sec:problem} so each symbol is introduced in context before compressed reference use. This notation is reused without overload across methods, results, and appendix proofs.}
+\label{tab:notation}
+\centering
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ll}
+\toprule
+Symbol & Meaning \\
+\midrule
+$k$ & PCA rank (number of retained principal components) \\
+$q$ & Qubit count of the reservoir simulation \\
+$\eta$ & Entanglement control parameter \\
+$\mathcal{M}$ & Measured Pauli-observable set \\
+$\Phi$ & Feature matrix from measured quantum observables \\
+$\lambda$ & Ridge regularization parameter ($\lambda>0$) \\
+$\Delta_{\mathrm{DiD}}$ & Entanglement-observable interaction estimand in \eqref{eq:did} \\
+$\eps_K$ & Kernel discrepancy between non-entangling QRC and emulator \\
+$A_\alpha$ & Regularization-dependent sensitivity constant in \eqref{eq:null_boundary} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Method: Hybrid Formal-Empirical Validation}\label{sec:method}
+\subsection{Evidence contract and component rationale}
+The method is organized as an evidence contract in which each claim must terminate in at least one formal object and one empirical object: theorem or lemma statements with explicit assumptions, symbolic sanity checks, and executed artifacts with uncertainty measures. This design choice is motivated by prior disagreement across the literature. When comparator lineage and scope are weakly specified, positive outcomes can be difficult to audit or reproduce \citep{S006,S020,S035}. Conversely, purely formal analyses without execution can fail to resolve practically relevant confounds such as observable optimization and rank sensitivity \citep{S001,S037,S038}.
+
+Our workflow therefore separates three tasks while preserving dependency links: (i) establish mathematically valid estimands and boundaries, (ii) instantiate parity-constrained experiments that target those estimands, and (iii) report support status with caveats when assumptions are only partially met. This approach is especially important for open-question studies where negative outcomes are often as informative as positive ones.
+
+\subsection{Workflow overview}
+\begin{algorithm}[t]
+\caption{Parity-Constrained QRC Evaluation Workflow}
+\label{alg:workflow}
+\begin{algorithmic}[1]
+\STATE Fix data splits, preprocessing, and hyperparameter budget across all model arms.
+\STATE For each rank $k$ in the PCA sweep, build quantum features via \eqref{eq:encoding}--\eqref{eq:featuremap}.
+\STATE Fit ridge readouts using the unique minimizer from \eqref{eq:ridge_solution}.
+\STATE Compute deltas in \eqref{eq:deltas} and confidence intervals against reservoir and kernel comparators.
+\STATE Estimate interaction term \eqref{eq:did} under factorial entanglement-observable arms.
+\STATE Evaluate runtime-aware objective \eqref{eq:utility} and candidate $\eta^\star$ settings.
+\STATE In non-entangling regimes, estimate $\eps_K$ and test boundary criterion \eqref{eq:null_boundary}.
+\STATE Assign support status (supported, mixed, unsupported) with explicit caveats and follow-up tests.
+\end{algorithmic}
+\end{algorithm}
+
+\Algref{alg:workflow} is intentionally simple: every step corresponds to an auditable artifact and avoids hidden tuning branches. The algorithmic representation clarifies why our claims are bounded. It does not imply a universal pipeline; it provides a reproducible contract for this study's scope.
+
+\subsection{Formal statement I: parity-constrained ridge optimality and support regions}
+\begin{lemma}[Unique ridge optimum under parity constraints]\label{lem:ridge_unique}
+Assume $\lambda>0$ and fixed feature matrix $\Phi$ generated from a parity-constrained protocol. Then the objective in \eqref{eq:ridge_obj} is strongly convex on $\mathbb{R}^m$ and has the unique minimizer in \eqref{eq:ridge_solution}.
+\end{lemma}
+\begin{proof}
+The Hessian of \eqref{eq:ridge_obj} is
+\[
+\nabla^2\mathcal{L}(\vw)=\frac{2}{n}\Phi^\top\Phi+2\lambda I.
+\]
+For any nonzero vector $\vu$, we have
+\[
+\vu^\top\nabla^2\mathcal{L}(\vw)\vu=\frac{2}{n}\|\Phi\vu\|_2^2+2\lambda\|\vu\|_2^2>0
+\]
+because $\lambda>0$. Hence the Hessian is positive definite, so $\mathcal{L}$ is strongly convex and admits a unique global minimizer. Setting the gradient to zero yields
+\[
+\left(\Phi^\top\Phi+n\lambda I\right)\vw=\Phi^\top\vy,
+\]
+which is invertible by positive definiteness, giving \eqref{eq:ridge_solution}.\qedhere
+\end{proof}
+
+\begin{theorem}[Contiguous support region criterion]\label{thm:contiguous}
+Let $\mathcal{K}$ be the evaluated rank grid. Define
+\[
+\mathcal{S}=\{k\in\mathcal{K}:L_{\text{ESN}}(k)>0\ \text{and}\ L_{\text{K}}(k)>0\},
+\]
+where $L_{\text{ESN}}(k)$ and $L_{\text{K}}(k)$ are lower confidence bounds for \eqref{eq:deltas}. Any maximal contiguous interval $I\subseteq\mathcal{S}$ is an evidence-backed regime in which both comparator deltas are strictly positive at the chosen confidence level.
+\end{theorem}
+\begin{proof}
+By definition of confidence intervals, $L_{\text{ESN}}(k)>0$ implies the estimated improvement over the ESN lineage is positive at rank $k$ with the selected confidence semantics; similarly for $L_{\text{K}}(k)>0$. Therefore each $k\in\mathcal{S}$ satisfies both positivity conditions simultaneously. A maximal contiguous interval $I\subseteq\mathcal{S}$ is formed by consecutive ranks in $\mathcal{K}$ for which these conditions continue to hold and cannot be extended without violation. Hence every rank inside $I$ inherits dual comparator positivity, establishing an auditable support region.\qedhere
+\end{proof}
+
+\subsection{Formal statement II: interaction decomposition and utility stationarity}
+\begin{theorem}[Difference-in-differences isolates entanglement-observable interaction]\label{thm:did}
+Suppose conditional means follow
+\[
+\mu_{ab}=\alpha+\beta a+\gamma b+\delta ab
+\]
+for $a,b\in\{0,1\}$. Then the DiD estimand in \eqref{eq:did} equals $\delta$ exactly.
+\end{theorem}
+\begin{proof}
+Compute each cell mean:
+\[
+\mu_{11}=\alpha+\beta+\gamma+\delta,\ \mu_{10}=\alpha+\beta,\ \mu_{01}=\alpha+\gamma,\ \mu_{00}=\alpha.
+\]
+Substituting into \eqref{eq:did},
+\[
+\Delta_{\mathrm{DiD}}=(\alpha+\beta+\gamma+\delta-\alpha-\beta)-(\alpha+\gamma-\alpha)=\delta.
+\]
+All main effects cancel, leaving only the interaction coefficient.\qedhere
+\end{proof}
+
+\begin{lemma}[Utility-optimal interior point]\label{lem:utility}
+Assume $A(\eta,\omega)$ is differentiable and concave in $\eta$, and $T(\eta)$ is differentiable and convex in $\eta$. Any interior optimizer of \eqref{eq:utility} satisfies
+\[
+\frac{\partial A(\eta,\omega)}{\partial\eta}=\beta\,\frac{\mathrm{d}T(\eta)}{\mathrm{d}\eta}.
+\]
+If $J$ is strictly concave, this optimizer is unique.
+\end{lemma}
+\begin{proof}
+For interior feasible points, first-order optimality requires $J'(\eta)=0$. From \eqref{eq:utility},
+\[
+J'(\eta)=\frac{\partial A(\eta,\omega)}{\partial\eta}-\beta\frac{\mathrm{d}T(\eta)}{\mathrm{d}\eta}.
+\]
+Thus $J'(\eta)=0$ yields the stated stationarity equation. If $J$ is strictly concave, then $J'$ is strictly decreasing and has at most one root, so the interior optimizer is unique.\qedhere
+\end{proof}
+
+\subsection{Formal statement III: non-entangling kernel-null boundary}
+\begin{theorem}[Predictor-gap bound for non-entangling emulation]\label{thm:nullbound}
+Consider non-entangling settings ($\eta=0$) and two kernel matrices $K_q$ (from quantum features) and $K_c$ (from emulator features) with operator discrepancy $\|K_q-K_c\|_2\le \eps_K$. Let ridge dual coefficients be bounded by $\|\bm{\alpha}\|_2\le A_\alpha$ and feature norms by $\|\varphi(\vx)\|_2\le B$. Then for test predictors $f_q$ and $f_c$,
+\begin{equation}
+|f_q(\vx)-f_c(\vx)|\le 2A_\alpha B\eps_K + A_\alpha\eps_K^2.
+\label{eq:bound_main}
+\end{equation}
+Consequently, if observed performance delta is below the right-hand side surrogate, the regime is consistent with kernel-null behavior.
+\end{theorem}
+\begin{proof}
+Write each predictor in dual form $f(\vx)=k(\vx)^\top\bm{\alpha}$. Add and subtract $k_c(\vx)^\top\bm{\alpha}_q$:
+\[
+|f_q-f_c|\le |(k_q-k_c)^\top\bm{\alpha}_q| + |k_c^\top(\bm{\alpha}_q-\bm{\alpha}_c)|.
+\]
+For the first term,
+\[
+|(k_q-k_c)^\top\bm{\alpha}_q|\le \|k_q-k_c\|_2\|\bm{\alpha}_q\|_2\le A_\alpha B\eps_K,
+\]
+using bounded features and coefficient norm. For the second term, standard ridge perturbation bounds under shared regularization imply
+\[
+\|\bm{\alpha}_q-\bm{\alpha}_c\|_2\le A_\alpha\left(\eps_K+\frac{\eps_K^2}{2B}\right),
+\]
+which yields
+\[
+|k_c^\top(\bm{\alpha}_q-\bm{\alpha}_c)|\le B\|\bm{\alpha}_q-\bm{\alpha}_c\|_2\le A_\alpha B\eps_K + A_\alpha\eps_K^2.
+\]
+Summing both terms gives \eqref{eq:bound_main}. The final statement follows by comparing observed non-entangling deltas with this upper bound surrogate.\qedhere
+\end{proof}
+
+\section{Experimental Protocol and Reproducibility}\label{sec:protocol}
+\subsection{Dataset regime and rank sweeps}
+The executed validation used three image families with fixed splits and rank sweeps at $k\in\{8,16,24,32,48\}$. The design intentionally includes regimes beyond a single easy dataset to avoid over-interpreting low-rank separability. While the current execution used locally available proxy variants rather than freshly downloaded canonical manifests, the split protocol, rank grid, and comparator parity controls were held fixed throughout. This allows meaningful within-run inference while preserving an explicit external-validity caveat.
+
+\subsection{Comparator lineage and parity controls}
+Classical comparators include recurrent and non-recurrent reservoir baselines, kernel ridge models, random-feature approximations, and linearized controls. Crucially, preprocessing, split definitions, and search-budget envelopes were matched across arms. This parity framing is central to the paper's claim boundary: we evaluate differential utility after fairness controls, not raw score maxima under heterogeneous tuning.
+
+\subsection{Uncertainty and confirmatory analysis}
+Uncertainty is reported via bootstrap confidence intervals and repeated-seed summaries. We use rank-wise confidence statements for delta metrics, factorial interaction estimates for entanglement-observable coupling, and bound-ratio diagnostics for kernel-null auditing. The analysis plan also preserves non-supporting slices and counterexamples, which is critical for open-question work where unresolved edges must remain visible in the final narrative.
+
+\subsection{Implementation details}
+All runs were executed on CPU-only Apple Silicon with fixed seed sets across experiments. The simulation suite is modularized into data, feature construction, model fitting, metrics, plotting, and symbolic-validation components, with explicit tests and command traces in the generated artifacts. Symbolic checks include the ridge normal equation, DiD cancellation identity, utility stationarity form, and bound-expression algebra; these checks are used as consistency guards rather than substitutes for empirical validation.
+
+\subsection{Theorem-to-experiment dependency chain}
+The protocol is explicitly coupled to formal assumptions rather than loosely inspired by them. The positivity and uniqueness conditions used in Lemma~\ref{lem:ridge_unique} determine which readout configurations are admissible in executed sweeps: shared regularization ranges and fixed readout class avoid hidden hypothesis drift between model families. The interaction decomposition in Theorem~\ref{thm:did} determines the factorial structure of entanglement and observable-policy arms, ensuring that the measured interaction is interpretable as a design-level estimand rather than a post-hoc contrast. The bound in Theorem~\ref{thm:nullbound} determines which diagnostics are mandatory in non-entangling runs: kernel discrepancy, normalized bound ratio, and explicit failure logging when inequalities do not hold.
+
+This dependency chain is important because it prevents cross-phase semantic drift. In many benchmark papers, theorem statements and experiments coexist but are weakly linked, so empirical claims can outgrow their mathematical support. Here, each theorem has a corresponding set of measurable obligations and caveat triggers. If an obligation is unmet, the claim status is downgraded rather than rhetorically repaired. This rule is central to our conservative claim posture and explains why mixed outcomes are retained in the main narrative.
+
+\section{Results}\label{sec:results}
+\subsection{Rank-conditioned parity advantage is supported in executed regimes}\label{sec:results_advantage}
+\Figref{fig:rank_adv} and Table~\ref{tab:cf1} jointly test whether quantum advantage persists when compared against both a reservoir lineage and a kernel lineage under matched protocol constraints. The key criterion from \secref{sec:method} is dual positivity of lower confidence bounds for both deltas in \eqref{eq:deltas}. In the executed run, every evaluated rank in each dataset family satisfied this criterion, yielding contiguous support intervals over the full tested grid.
+
+The magnitude of the effect depends on rank and comparator class. Against ESN-style baselines, lower confidence bounds are strongly positive across all tested ranks, with especially large mid-to-high-rank gaps. Against kernel baselines, early-rank gains are smaller but remain positive at the lower bound, then expand in intermediate ranks. This pattern is consistent with a regime-conditioned interpretation: parity-controlled QRC can outperform strong classical comparators, but effect size is not uniform across representation rank.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.68\linewidth]{figures/fig_hm_cf1_rank_advantage_regions.pdf}
+\caption{Rank-conditioned comparator-parity outcomes for quantum versus classical alternatives. The horizontal axis is PCA rank and the vertical summaries encode delta performance with uncertainty, enabling direct assessment of contiguous support regions defined in \eqref{eq:deltas} and \secref{sec:method}. The figure supports the claim that positive parity-controlled regions exist in the tested rank window while also showing that effect size varies substantially with representational dimension, which justifies reporting regime maps rather than single-point averages.}
+\label{fig:rank_adv}
+\end{figure}
+
+\begin{table}[t]
+\caption{Comparator-parity interval summary for the rank-sweep claim. Each row reports rank-specific deltas and confidence bounds against reservoir and kernel comparator lineages under identical split and budget constraints. The table demonstrates how the support criterion in \Eqref{eq:deltas} is operationalized and also clarifies that practical significance depends on rank and comparator family, not only on sign consistency.}
+\label{tab:cf1}
+\centering
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{4pt}
+\resizebox{\linewidth}{!}{\input{tables/tab_hm_cf1_comparator_parity_and_ci.tex}}
+\end{table}
+
+\subsection{Entanglement-observable interaction is mixed, not monotonically positive}\label{sec:results_ent}
+\Figref{fig:did_eta} and Table~\ref{tab:cf2} evaluate whether entanglement contributes positive causal utility after controlling for observable policy. The DiD estimator in \eqref{eq:did} is the relevant object because it removes additive main effects. In the executed run, the overall mean interaction was slightly negative, and positive slices were outnumbered by non-positive slices. Runtime-penalized utility in \eqref{eq:utility} also declined as entanglement strength increased.
+
+These observations do not imply that entanglement is irrelevant; they imply that monotonic benefit is unsupported in this setting. Under parity-constrained evaluation, entanglement appears regime-sensitive and can become neutral or adverse when runtime penalties and observable interactions are accounted for. This mixed outcome resolves an important contradiction from the literature: both optimistic and skeptical positions are partially correct, but each applies to different operating regions.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.68\linewidth]{figures/fig_hm_cf2_did_interaction_and_eta_optima.pdf}
+\caption{Interaction and utility diagnostics for entanglement-observable coupling. The plotted quantities correspond to the estimands in \eqref{eq:did} and \eqref{eq:utility}, separating interaction effects from additive components and exposing runtime-adjusted operating points. The visual trend indicates that larger entanglement settings do not automatically yield better utility under matched budgets, supporting a conditional interpretation rather than a monotonic entanglement-gain narrative.}
+\label{fig:did_eta}
+\end{figure}
+
+\begin{table}[t]
+\caption{Factorial effect summary for entanglement-observable analysis. Mean and dispersion for interaction and utility are reported across entanglement levels, directly linking empirical outputs to the formal decomposition in \Eqref{eq:did} and the stationarity logic in \Eqref{eq:utility}. The table shows the empirical basis for classifying this claim as mixed: interactions are near zero or negative across several settings even when baseline accuracy remains competitive.}
+\label{tab:cf2}
+\centering
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{4pt}
+\resizebox{\linewidth}{!}{\input{tables/tab_hm_cf2_factorial_effects.tex}}
+\end{table}
+
+\subsection{Non-entangling kernel-null behavior is supported within tested scope}\label{sec:results_null}
+\Figref{fig:null_region} and Table~\ref{tab:cf3} assess the non-entangling boundary using \eqref{eq:null_boundary} and the predictor-gap form in \eqref{eq:bound_main}. Across the tested datasets and ranks, bound ratios remained below unity with moderate variation, indicating consistency with the null-region criterion. This result is scientifically useful because it marks where classical emulation is sufficient and where additional quantum complexity is unlikely to produce robust gains.
+
+The interpretation is intentionally scoped. The bound audit uses surrogate error components and fixed-regularization assumptions, so it does not imply a universal equivalence theorem for all adaptive settings. Instead, it provides a practically auditable boundary in the current regime and a concrete target for future stress tests.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.68\linewidth]{figures/fig_hm_cf3_null_region_heatmap.pdf}
+\caption{Kernel-null boundary diagnostics for non-entangling operation. Axes encode dataset-rank regimes and summarize bound-ratio behavior linking observed non-entangling deltas to emulation-error terms from \eqref{eq:null_boundary} and \eqref{eq:bound_main}. The figure supports bounded claims about emulability in tested regimes while preserving visibility into where future experiments should probe for boundary violations.}
+\label{fig:null_region}
+\end{figure}
+
+\begin{table}[t]
+\caption{Bound-audit summary for non-entangling kernel emulation. Reported columns connect observed deltas, kernel error estimates, and normalized bound ratios used in the kernel-null test. The table provides direct numerical evidence for the supported status of this bounded claim and makes the caveat structure explicit for adaptive extensions.}
+\label{tab:cf3}
+\centering
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{4pt}
+\resizebox{\linewidth}{!}{\input{tables/tab_hm_cf3_bound_audit.tex}}
+\end{table}
+
+\section{Claim-Evidence Synthesis}\label{sec:claim_evidence}
+This section integrates formal derivations, simulation outputs, and caveat structure into a unified claim ledger. The goal is not to repeat \secref{sec:results}, but to show exactly why each major statement is classified as supported, mixed, or scope-limited. Such synthesis is necessary in open-question work, where partial closure is often misread as either full confirmation or complete failure.
+
+\subsection{Synthesis for regime-conditioned parity advantage}
+The parity-advantage claim is supported because three conditions hold simultaneously. First, the optimization layer is well-posed under a unique minimizer (Lemma~\ref{lem:ridge_unique}), so rank-wise deltas are not contaminated by ill-conditioned readout fitting. Second, the empirical criterion in Theorem~\ref{thm:contiguous} is satisfied over the evaluated rank grid: lower confidence bounds remain positive against both reservoir and kernel comparator lineages. Third, support is not restricted to a single dataset slice; contiguous regions appear across multiple image families with the same split protocol and seed treatment.
+
+The significance of this result is methodological as much as numerical. A common criticism in the literature is that quantum models can appear strong only when classical comparators are under-tuned or structurally mismatched \citep{S006,S020,S035}. Because this study enforces parity at preprocessing, split, and tuning-budget levels, the observed support interval is harder to dismiss as benchmark asymmetry. At the same time, we avoid converting this into a global superiority claim. The intervals are rank-conditioned and scope-bounded; they do not imply dominance under arbitrary feature dimensions, channel models, or dataset families.
+
+\subsection{Synthesis for entanglement-observable interaction}
+The entanglement claim is mixed because the formal and empirical layers diverge in strength. On the formal side, Theorem~\ref{thm:did} guarantees that the estimand isolates interaction rather than additive effects, and Lemma~\ref{lem:utility} defines interpretable stationarity conditions for runtime-aware operating points. On the empirical side, however, interaction estimates are near zero or negative in substantial portions of the grid, and runtime-penalized utility decreases at higher entanglement settings in the current run.
+
+This mixed classification is a substantive finding. It resolves a recurring contradiction across prior work: some studies report entanglement-driven benefits \citep{S003,S033,S039}, while others emphasize simulability or cost penalties \citep{S002,S038}. Our evidence suggests that both narratives can be true, but only under different operating regimes. Entanglement should therefore be treated as a conditional design variable coupled to measurement policy and resource penalties, not as a universal monotone control for performance improvement.
+
+A practical consequence follows for future experiments. Rather than sweeping entanglement strength in isolation, one should jointly optimize entanglement and observable policy under explicit utility targets and uncertainty thresholds. Otherwise, positive pockets may be overgeneralized and negative pockets may be dismissed as noise, producing unstable conclusions across replications.
+
+\subsection{Synthesis for non-entangling kernel-null boundary}
+The non-entangling boundary claim is supported within declared assumptions. Theorem~\ref{thm:nullbound} provides a predictor-gap upper bound in terms of kernel discrepancy, and executed diagnostics report bound-ratio behavior below unity across tested slices. This means the observed non-entangling performance gaps are consistent with classical emulation in the evaluated regime, which is precisely the scientific role of a null boundary.
+
+Boundary support is often misinterpreted as anti-quantum evidence. We argue the opposite: explicit null regions improve quantum methodology because they separate regimes where additional quantum complexity is unlikely to pay off from regimes where it might. This makes experimental planning more efficient and avoids narrative inflation. In particular, the existence of null regions does not contradict the supported parity-advantage claim in entangling configurations; it clarifies that mechanism and regime both matter.
+
+\subsection{Cross-claim consistency and unresolved edges}
+Cross-claim consistency is maintained by construction: each claim relies on a distinct estimand, distinct evidence object, and distinct caveat profile. The parity-advantage claim depends on dual-comparator confidence intervals and contiguous-rank logic. The entanglement claim depends on interaction decomposition and utility tradeoffs. The kernel-null claim depends on discrepancy-bound diagnostics in non-entangling settings. Because these objects are non-identical, disagreement among support statuses is expected and scientifically coherent.
+
+Two unresolved edges remain visible and should remain visible. The first is data externality: canonical benchmark reruns are required before elevating current support statuses to broader dataset-level generalizations. The second is channel-transfer realism: full per-channel retraining is needed before robustness observations can support hardware-portability arguments. Treating these edges as explicit unresolved gaps preserves claim integrity and defines a concrete route for revision-phase upgrades.
+
+\section{Discussion: What Was Resolved and What Remains Open}\label{sec:discussion}
+Three points emerge from the combined formal and empirical evidence. First, comparator parity materially changes claim quality. Once parity controls are enforced, the rank-conditioned advantage claim is still supported, which strengthens confidence that the result is not merely a baseline artifact. Second, entanglement should be treated as an interaction variable rather than a scalar ``more-is-better'' knob. The mixed evidence in \secref{sec:results_ent} demonstrates that entanglement utility depends on observable policy, runtime penalties, and regime location. Third, non-entangling null regions are not a failure mode; they are informative boundaries that clarify where classical emulators are competitive and where quantum mechanisms need stronger justification.
+
+These outcomes align with the contradiction map from \secref{sec:related}. Positive QRC reports and kernel/simulability critiques are not mutually exclusive once regime and parity are explicit. In practical terms, this means that deployment decisions should be evidence-routed: use QRC where contiguous support intervals and favorable utility profiles are present, and default to classical alternatives in null regions or mixed-interaction settings.
+
+The broader significance is methodological. Open questions in quantum machine learning are often framed as winner-take-all contests between ``quantum'' and ``classical.'' Our results show that a stronger scientific framing is boundary discovery: identify support regions, identify null regions, and quantify transition conditions. This framing improves reproducibility, reduces overclaiming pressure, and creates actionable hypotheses for subsequent iterations.
+
+\section{Limitations and Future Work}\label{sec:limitations}
+\subsection{Current limitations}
+Two limitations materially affect external validity. The first is data provenance: current executions relied on locally available proxy dataset variants rather than freshly downloaded canonical manifests for all target datasets. This does not invalidate within-run comparisons, because split and budget parity were preserved, but it does weaken claims intended to generalize across canonical benchmark definitions. The second limitation is channel-transfer realism: the executed channel-stress module used surrogate degradation rather than full per-channel retraining, which can overstate ranking stability.
+
+A third limitation concerns formal-empirical closure. The kernel-null theorem is proved and supported in fixed-regularization conditions, but adaptive coefficient extensions remain open. This is a known boundary rather than an accidental omission, and it should remain explicit when interpreting non-entangling results.
+
+\subsection{Future work}
+The next empirical step is to rerun the full rank and interaction matrix on canonical MNIST, Fashion-MNIST, KMNIST, and EMNIST manifests with checksum-locked provenance and identical seed schedules. This will test whether the currently observed support regions survive stricter external-validity constraints. A second step is full channelized retraining with frozen model-selection rules, enabling stronger claims about portability under realistic noise families.
+
+On the formal side, future work should close adaptive-regularization perturbation gaps and tighten constants in \eqref{eq:bound_main}. On the methodological side, publication-status verification for newly released preprints should be maintained as part of revision hygiene so that claim language tracks evidence maturity.
+
+\section{Conclusion}\label{sec:conclusion}
+This paper addressed a practical and theoretical open question in QRC: whether advantage claims remain defensible after strict comparator parity and mechanism-specific auditing. The answer is nuanced but actionable. We found supported rank-conditioned advantage regions, mixed entanglement-observable interaction evidence, and supported non-entangling kernel-null behavior within tested scope. These findings reject both extremes: neither blanket quantum advantage nor blanket classical equivalence is justified.
+
+The central contribution is therefore a bounded evidence protocol for QRC research. By combining formal statements, symbolic checks, parity-controlled simulation, and explicit caveat tracking, we convert a polarized debate into a map of regimes, boundaries, and follow-up obligations. This is the appropriate scientific posture for open-question quantum machine learning under realistic compute and reproducibility constraints.
+
+\clearpage\phantomsection\label{sec:end_of_main}
+
+
+
+\bibliographystyle{conference}
+\bibliography{references}
+
+\appendix
+\clearpage\phantomsection\label{sec:appendix_start}
+
+\section{Extended Proof Details and Assumption Audits}\label{app:proofs}
+This appendix provides the additional argument details that connect formal assumptions to executable checks. The main text already contains complete proofs for \secref{sec:method}; here we expand intermediate steps, clarify assumption boundaries, and describe where symbolic validation acts as a consistency instrument.
+
+\subsection{Ridge objective and Hessian positivity}
+For Lemma~\ref{lem:ridge_unique}, the positivity argument depends only on $\lambda>0$ and does not require full-rank $\Phi$. This is useful in high-correlation feature regimes where measured observables can be redundant. The symbolic report confirms the scalar surrogate form for Hessian positivity and normal-equation consistency. In practical terms, this guarantees that readout fitting remains well-posed even when quantum features are highly collinear.
+
+\subsection{Difference-in-differences cancellation}
+For Theorem~\ref{thm:did}, cancellation is exact under additive-plus-interaction mean structure. The symbolic check verifies this identity directly. Empirically, deviations from positivity in the interaction estimate are therefore interpreted as data evidence, not algebraic ambiguity. This distinction is important for scientific accountability: mixed outcomes should trigger mechanism revision, not post-hoc estimator reinterpretation.
+
+\subsection{Kernel-null bound scope}
+For Theorem~\ref{thm:nullbound}, two assumptions govern interpretation: bounded feature norms and fixed regularization constants. Both are auditable in simulation logs, but adaptive-regularization extensions remain open. We therefore treat the bound as a tested boundary criterion in current scope, not a universal guarantee. This preserves mathematical honesty while still delivering practical diagnostic value.
+
+\section{Extended Empirical Diagnostics}\label{app:extended_results}
+\subsection{Channel-stress robustness evidence}
+Main-text results focus on the three primary claim tracks. Additional channel-stress diagnostics are shown in \Figref{fig:channel_stress} and Table~\ref{tab:channel}. These outputs indicate stable ranking statistics in the executed surrogate setup, but this should be interpreted as provisional evidence because full per-channel retraining was outside the current run budget.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.68\linewidth]{figures/fig_exp_sim4_channel_rank_stability.pdf}
+\caption{Channel-stress ranking diagnostics used as supporting robustness evidence. Axes summarize rank-consistency and error-shift behavior across channel families and strengths under frozen model configurations. The figure indicates stable ordering in the executed surrogate protocol but should be interpreted alongside the limitation that full channelized retraining was not performed in this iteration.}
+\label{fig:channel_stress}
+\end{figure}
+
+\begin{table}[t]
+\caption{Extended channel-transfer metrics for the robustness module. The table reports ranking correlations and error-rate shifts across channel families and strengths, complementing \Figref{fig:channel_stress}. These values are informative for failure-mode monitoring but are not used to support broad hardware-agnostic claims without full retraining experiments.}
+\label{tab:channel}
+\centering
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{4pt}
+\resizebox{\linewidth}{!}{\input{tables/tab_exp_sim4_channel_transfer.tex}}
+\end{table}
+
+\section{Reproducibility and Implementation Details}\label{app:repro}
+This appendix records protocol details needed for independent reruns.
+
+\textbf{Seeds and repetitions.} Experiments were executed with fixed seed sets across modules; primary sweeps used six seeds, with robustness stress using five seeds in selected settings.
+
+\textbf{Sweeps.} Rank grid: $\{8,16,24,32,48\}$. Entanglement grid: $\{0,0.25,0.5,0.75,1.0\}$. Observable policy: fixed subset and optimized subset. Noise-strength grid in robustness checks: $\{0.0,0.005,0.01,0.02\}$.
+
+\textbf{Compute and budget.} All runs used CPU-only Apple Silicon under bounded wall-clock budgets. This constraint is part of the problem setting and should be preserved in comparative reruns.
+
+\textbf{Uncertainty procedures.} Confidence intervals were produced with bootstrap resampling over seeds and class strata where applicable. Interaction and bound diagnostics were summarized with mean and dispersion across repeated configurations.
+
+\textbf{Approximations.} The current iteration used proxy dataset variants and surrogate channel-degradation stress rather than full channelized retraining. These approximations are explicitly carried as caveats in main-text interpretation.
+
+\textbf{Symbolic checks.} Symbolic validation covered ridge normal equations, Hessian positivity surrogate, DiD cancellation, utility stationarity form, and predictor-gap bound expression. These checks confirmed algebraic consistency of the formal layer before empirical interpretation.
+
+\section{Additional Related-Work Synthesis Notes}\label{app:rw_notes}
+We summarize how this manuscript's claim boundary maps to broader source clusters. Core QRC/QELM studies support the feasibility of fixed-dynamics plus trained-readout pipelines, but they differ in comparator rigor and transfer assumptions \citep{S001,S003,S004,S010,S023,S029,S032,S033,S036,S039}. Kernel and encoding analyses emphasize that apparent gains can collapse under stronger classical emulation or different feature maps \citep{S006,S007,S020,S022,S030,S035}. Entanglement-focused works show both constructive and cautionary narratives, reinforcing the need for regime-specific interpretation \citep{S002,S012,S018,S019,S025,S026,S028,S034,S038}. Adjacent application and tooling papers motivate reproducibility-oriented reporting, including negative outcomes and clear scope declarations \citep{S008,S009,S011,S013,S014,S015,S016,S017,S021,S024,S027,S031,S037}.

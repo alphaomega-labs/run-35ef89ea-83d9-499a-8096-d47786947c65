@@ -1,0 +1,5 @@
+FC_DMM_1: Ridge objective normal-equation form verified symbolically at matrix-calculus level.
+FC_DMM_1 Hessian scalar surrogate: 2*lam + 2*x**2 > 0 when lam>0.
+FC_DMM_2 DiD simplifies to: eta*g.
+FC_DMM_2 J'(eta)=-beta_t + c1 - 2*c2*eta; critical point(s): [(-beta_t + c1)/(2*c2)].
+FC_DMM_3 predictor-gap bound expression: 2*A_alpha*B*eps + A_alpha*eps**2.

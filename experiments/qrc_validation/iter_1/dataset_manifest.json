@@ -1,0 +1,39 @@
+{
+  "source": "openml via sklearn.fetch_openml",
+  "openml_data_home": "experiments/.cache/openml",
+  "datasets": [
+    {
+      "requested_dataset": "MNIST",
+      "resolved_dataset": "MNIST::mnist_784",
+      "n_samples_subset": 1200,
+      "n_features": 784,
+      "n_classes_subset": 10,
+      "sha256_subset": "b80a99907969fe952ce89ae590cc5acbb2de97a915e67b5b56e6c964ef781755"
+    },
+    {
+      "requested_dataset": "FASHION_MNIST",
+      "resolved_dataset": "FASHION_MNIST::Fashion-MNIST",
+      "n_samples_subset": 1200,
+      "n_features": 784,
+      "n_classes_subset": 10,
+      "sha256_subset": "04c65448474f77d197da09753c68cae37b85209a2da765e0fd082122576bff98"
+    },
+    {
+      "requested_dataset": "KMNIST",
+      "resolved_dataset": "KMNIST::Kuzushiji-MNIST",
+      "n_samples_subset": 1200,
+      "n_features": 784,
+      "n_classes_subset": 10,
+      "sha256_subset": "d88c541f27857ac3235c86972960c45a64a0624dc0d3536a173b105712db3b5e"
+    },
+    {
+      "requested_dataset": "EMNIST_LETTERS",
+      "resolved_dataset": "EMNIST_LETTERS::EMNIST_Balanced",
+      "n_samples_subset": 5640,
+      "n_features": 784,
+      "n_classes_subset": 47,
+      "sha256_subset": "c07e5ba3dcebb1f1cbb461054f2cafa4f93d4812ab0b725d070cb6e858ef1465"
+    }
+  ],
+  "max_samples_per_class": 120
+}

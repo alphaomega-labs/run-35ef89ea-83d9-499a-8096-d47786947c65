@@ -1,0 +1,14 @@
+{
+  "source": "sklearn.datasets.load_digits",
+  "n_samples": 1797,
+  "n_features": 64,
+  "n_classes": 10,
+  "proxy_datasets": [
+    "MNIST_PROXY",
+    "FASHION_MNIST_PROXY",
+    "KMNIST_PROXY",
+    "EMNIST_LETTERS_PROXY"
+  ],
+  "max_samples_per_class": 120,
+  "sha256_digits_array": "f6d9e39f37dc45d327f6db33428ee58970ccceabb2535a5c179de35886b70443"
+}

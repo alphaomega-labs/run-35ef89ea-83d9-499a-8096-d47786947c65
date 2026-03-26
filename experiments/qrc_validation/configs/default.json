@@ -1,0 +1,15 @@
+{
+  "experiment_id": "qrc_validation",
+  "seeds": [7, 11, 19, 23, 42, 73],
+  "datasets": ["MNIST", "FASHION_MNIST", "KMNIST", "EMNIST_LETTERS"],
+  "pca_components": [8, 16, 24, 32, 48],
+  "entanglement_strength_eta": [0.0, 0.25, 0.5, 0.75, 1.0],
+  "observable_policy": ["fixed_pauli_subset", "greedy_operator_optimized"],
+  "noise_channel_family": ["depolarizing", "dephasing", "amplitude_damping", "measurement_flip"],
+  "noise_strength": [0.0, 0.005, 0.01, 0.02],
+  "ridge_lambda": 0.001,
+  "max_samples_per_class": 120,
+  "channel_rank": 32,
+  "test_size": 0.3,
+  "openml_data_home": "experiments/.cache/openml"
+}

@@ -1,0 +1,6 @@
+theorem_id,check,status,notes
+FC_DMM_1,normal_equation_identity,pass,Symbolic form consistent with ridge stationary condition
+FC_DMM_1,hessian_pd,pass,Positive when lambda>0
+FC_DMM_2,did_cancellation,pass,DiD isolates interaction term g*eta
+FC_DMM_2,utility_stationarity,pass,Closed-form derivative and stationary point computed
+FC_DMM_3,inequality_chain,pass,Bound expression derived with epsilon_K substitution

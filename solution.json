@@ -1,0 +1,145 @@
+{
+  "abstract": "Assess whether quantum reservoirs (with PCA-encoded inputs) can outperform classical ones and how entanglement changes feature mapping.",
+  "artifacts": [
+    {
+      "kind": "github_repo",
+      "label": "GitHub Repo",
+      "uri": "https://github.com/alphaomega-labs/run-35ef89ea-83d9-499a-8096-d47786947c65"
+    },
+    {
+      "kind": "paper_pdf",
+      "label": "Paper PDF",
+      "uri": "https://raw.githubusercontent.com/alphaomega-labs/run-35ef89ea-83d9-499a-8096-d47786947c65/main/paper/main.pdf"
+    },
+    {
+      "kind": "paper_thumbnail",
+      "label": "Paper Thumbnail",
+      "uri": "https://raw.githubusercontent.com/alphaomega-labs/run-35ef89ea-83d9-499a-8096-d47786947c65/main/paper/thumbnail.png"
+    },
+    {
+      "kind": "latex_sources",
+      "label": "LaTeX Sources",
+      "uri": "https://github.com/alphaomega-labs/run-35ef89ea-83d9-499a-8096-d47786947c65/blob/main/paper/main.tex"
+    },
+    {
+      "kind": "sources",
+      "label": "Sources",
+      "uri": "https://github.com/alphaomega-labs/run-35ef89ea-83d9-499a-8096-d47786947c65/blob/main/sources/sources.json"
+    }
+  ],
+  "artifacts_summary": "Updated writing_presentation follow-up output with explicit manuscript artifact typing for paper/main.tex, cleared validation-blocking status, and synchronized tracker/research-trace updates.",
+  "compute_budget": "1 APU, Apple Silicon, 128GB",
+  "constraints": [
+    "Accelerator constraint: CPU only available.",
+    "Compute budget: 1 APU (Apple Silicon), 128GB.",
+    "Problem framing is exploratory/open-question and should avoid unsupported quantum-advantage claims.",
+    "Target deadline provided as 2026-03-10 (already past at intake time 2026-03-25)."
+  ],
+  "context_id": "35ef89ea-83d9-499a-8096-d47786947c65",
+  "created_at": "2026-03-26T02:27:43.965395+00:00",
+  "difficulty": "Advanced",
+  "domain": "Quantum Computing",
+  "evaluation_plan": "Compare quantum vs classical reservoirs on image classification with PCA-component sweeps; run ablations with and without entangling evolution; use fixed train/validation/test splits and report classification metrics plus sensitivity to number of components, measured observables, and reservoir settings; include at least one dataset beyond MNIST if MNIST separability after PCA obscures differences.",
+  "expected_artifacts": [
+    "Paper",
+    "Code",
+    "Package"
+  ],
+  "full_description": "I want to know if there is a quantum advantage in Quantum Reservoir Computing for image classification. If we take an image, and compute its PCA decomposition, and I feed the first X components to the reservoir as inputs (e.g. angle encoding), is there an advantage to using a quantum reservoir? What is the role of entanglement? How does the reservoir transform the features with and without entanglement? As a reservoir, we can take a simple transverse Ising model and angle encoding, and measuring a subset of pauli operators. You can try the MNIST dataset for digit classification, although I feel that the PCA is already so discriminatory (the only information in the picture is the digit, so *any* substantial difference between pictures immediately translates to a different classificaiton) that it will be hard to improve anything with QRC. Would other datasets be better test cases?\n\nPapers listing to download for review and context:\n\nhttps://arxiv.org/pdf/2509.06873\nhttps://arxiv.org/pdf/2409.00998\nhttps://arxiv.org/pdf/2602.14677\nhttps://arxiv.org/pdf/2008.08605\nhttps://arxiv.org/pdf/2101.11020\nhttps://arxiv.org/pdf/2407.02553\nhttps://arxiv.org/pdf/2412.06758\n\nResource-informed context from provided references (workspace/resources): the attached papers include works explicitly on quantum extreme learning/image classification, entanglement and classical simulability, measurement-operator optimization in QRC, and foundations on encoding expressivity and quantum models as kernel methods. This supports positioning the study around advantage conditions, entanglement effects, and readout design choices.",
+  "goals": [
+    "Assess whether a quantum reservoir can outperform a classical reservoir for PCA-encoded image classification under CPU-only constraints.",
+    "Isolate and quantify the role of entanglement by comparing feature mappings and performance with and without entangling dynamics.",
+    "Evaluate a transverse Ising reservoir with angle encoding and partial Pauli-observable readout on MNIST and potentially harder alternatives."
+  ],
+  "key_terms": [
+    "quantum reservoir computing",
+    "quantum extreme learning machine",
+    "classical reservoir baseline",
+    "PCA",
+    "angle encoding",
+    "transverse Ising model",
+    "entanglement",
+    "feature map",
+    "Pauli observables",
+    "MNIST",
+    "measurement operator optimization",
+    "kernel perspective"
+  ],
+  "original_problem": {
+    "compute_budget": "1 APU, Apple Silicon, 128GB",
+    "constraints": [
+      "Accelerator constraint: CPU only available.",
+      "Compute budget: 1 APU (Apple Silicon), 128GB.",
+      "Problem framing is exploratory/open-question and should avoid unsupported quantum-advantage claims.",
+      "Target deadline provided as 2026-03-10 (already past at intake time 2026-03-25)."
+    ],
+    "difficulty": "Advanced",
+    "domain": "Quantum Computing",
+    "evaluation_plan": "Compare quantum vs classical reservoirs on image classification with PCA-component sweeps; run ablations with and without entangling evolution; use fixed train/validation/test splits and report classification metrics plus sensitivity to number of components, measured observables, and reservoir settings; include at least one dataset beyond MNIST if MNIST separability after PCA obscures differences.",
+    "expected_artifacts": [
+      "Paper",
+      "Code",
+      "Package"
+    ],
+    "full_description": "I want to know if there is a quantum advantage in Quantum Reservoir Computing for image classification. If we take an image, and compute its PCA decomposition, and I feed the first X components to the reservoir as inputs (e.g. angle encoding), is there an advantage to using a quantum reservoir? What is the role of entanglement? How does the reservoir transform the features with and without entanglement? As a reservoir, we can take a simple transverse Ising model and angle encoding, and measuring a subset of pauli operators. You can try the MNIST dataset for digit classification, although I feel that the PCA is already so discriminatory (the only information in the picture is the digit, so *any* substantial difference between pictures immediately translates to a different classificaiton) that it will be hard to improve anything with QRC. Would other datasets be better test cases?\n\nPapers listing to download for review and context:\n\nhttps://arxiv.org/pdf/2509.06873\nhttps://arxiv.org/pdf/2409.00998\nhttps://arxiv.org/pdf/2602.14677\nhttps://arxiv.org/pdf/2008.08605\nhttps://arxiv.org/pdf/2101.11020\nhttps://arxiv.org/pdf/2407.02553\nhttps://arxiv.org/pdf/2412.06758\n\nResource-informed context from provided references (workspace/resources): the attached papers include works explicitly on quantum extreme learning/image classification, entanglement and classical simulability, measurement-operator optimization in QRC, and foundations on encoding expressivity and quantum models as kernel methods. This supports positioning the study around advantage conditions, entanglement effects, and readout design choices.",
+    "goals": [
+      "Assess whether a quantum reservoir can outperform a classical reservoir for PCA-encoded image classification under CPU-only constraints.",
+      "Isolate and quantify the role of entanglement by comparing feature mappings and performance with and without entangling dynamics.",
+      "Evaluate a transverse Ising reservoir with angle encoding and partial Pauli-observable readout on MNIST and potentially harder alternatives."
+    ],
+    "key_terms": [
+      "quantum reservoir computing",
+      "quantum extreme learning machine",
+      "classical reservoir baseline",
+      "PCA",
+      "angle encoding",
+      "transverse Ising model",
+      "entanglement",
+      "feature map",
+      "Pauli observables",
+      "MNIST",
+      "measurement operator optimization",
+      "kernel perspective"
+    ],
+    "problem_type": "Open Question",
+    "related_links": [
+      "https://arxiv.org/pdf/2509.06873",
+      "https://arxiv.org/pdf/2409.00998",
+      "https://arxiv.org/pdf/2602.14677",
+      "https://arxiv.org/pdf/2008.08605",
+      "https://arxiv.org/pdf/2101.11020"
+    ],
+    "request_text": "Title: Quantum Reservoir Computing\nAbstract: Assess whether quantum reservoirs (with PCA-encoded inputs) can outperform classical ones and how entanglement changes feature mapping.\nFull Description: I want to know if there is a quantum advantage in Quantum Reservoir Computing for image classification. If we take an image, and compute its PCA decomposition, and I feed the first X components to the reservoir as inputs (e.g. angle encoding), is there an advantage to using a quantum reservoir? What is the role of entanglement? How does the reservoir transform the features with and without entanglement? As a reservoir, we can take a simple transverse Ising model and angle encoding, and measuring a subset of pauli operators. You can try the MNIST dataset for digit classification, although I feel that the PCA is already so discriminatory (the only information in the picture is the digit, so *any* substantial difference between pictures immediately translates to a different classificaiton) that it will be hard to improve anything with QRC. Would other datasets be better test cases? \n\nPapers listing to download for review and context:\n\nhttps://arxiv.org/pdf/2509.06873\nhttps://arxiv.org/pdf/2409.00998\nhttps://arxiv.org/pdf/2602.14677\nhttps://arxiv.org/pdf/2008.08605\nhttps://arxiv.org/pdf/2101.11020\nhttps://arxiv.org/pdf/2407.02553\nhttps://arxiv.org/pdf/2412.06758\nProblem Type: Open Question\nDifficulty: Advanced\nDomain: Quantum Computing\nOriginator: Marius-Constantin Dinu\nCompute Budget: 1 APU, Apple Silicon, 128GB\nRequired Accelerator: CPU only available\nTarget Deadline: 2026-03-10\nTags: quantum computing, reservoir computing\nCategories: Quantum Computing\nExpected Artifacts: Paper, Code, Package\nRelated Links: https://arxiv.org/pdf/2509.06873, https://arxiv.org/pdf/2409.00998, https://arxiv.org/pdf/2602.14677, https://arxiv.org/pdf/2008.08605, https://arxiv.org/pdf/2101.11020\nDataset Links: None",
+    "tags": [
+      "quantum computing",
+      "reservoir computing"
+    ],
+    "target_deadline": "2026-03-10"
+  },
+  "paper_pdf_url": "https://raw.githubusercontent.com/alphaomega-labs/run-35ef89ea-83d9-499a-8096-d47786947c65/main/paper/main.pdf",
+  "paper_thumbnail_url": "https://raw.githubusercontent.com/alphaomega-labs/run-35ef89ea-83d9-499a-8096-d47786947c65/main/paper/thumbnail.png",
+  "parent_run_id": "34c21e67-a424-4934-a7c0-a1ad559af9bd",
+  "pipeline_id": "35ef89ea-83d9-499a-8096-d47786947c65",
+  "preview_run_id": "4ce9c625-8c51-483a-8c2c-6a18bb6d5e5f",
+  "problem_type": "Open Question",
+  "published_run_id": "4ce9c625-8c51-483a-8c2c-6a18bb6d5e5f",
+  "related_links": [
+    "https://arxiv.org/pdf/2509.06873",
+    "https://arxiv.org/pdf/2409.00998",
+    "https://arxiv.org/pdf/2602.14677",
+    "https://arxiv.org/pdf/2008.08605",
+    "https://arxiv.org/pdf/2101.11020"
+  ],
+  "repo_url": "https://github.com/alphaomega-labs/run-35ef89ea-83d9-499a-8096-d47786947c65",
+  "request_text": "Title: Quantum Reservoir Computing\nAbstract: Assess whether quantum reservoirs (with PCA-encoded inputs) can outperform classical ones and how entanglement changes feature mapping.\nFull Description: I want to know if there is a quantum advantage in Quantum Reservoir Computing for image classification. If we take an image, and compute its PCA decomposition, and I feed the first X components to the reservoir as inputs (e.g. angle encoding), is there an advantage to using a quantum reservoir? What is the role of entanglement? How does the reservoir transform the features with and without entanglement? As a reservoir, we can take a simple transverse Ising model and angle encoding, and measuring a subset of pauli operators. You can try the MNIST dataset for digit classification, although I feel that the PCA is already so discriminatory (the only information in the picture is the digit, so *any* substantial difference between pictures immediately translates to a different classificaiton) that it will be hard to improve anything with QRC. Would other datasets be better test cases? \n\nPapers listing to download for review and context:\n\nhttps://arxiv.org/pdf/2509.06873\nhttps://arxiv.org/pdf/2409.00998\nhttps://arxiv.org/pdf/2602.14677\nhttps://arxiv.org/pdf/2008.08605\nhttps://arxiv.org/pdf/2101.11020\nhttps://arxiv.org/pdf/2407.02553\nhttps://arxiv.org/pdf/2412.06758\nProblem Type: Open Question\nDifficulty: Advanced\nDomain: Quantum Computing\nOriginator: Marius-Constantin Dinu\nCompute Budget: 1 APU, Apple Silicon, 128GB\nRequired Accelerator: CPU only available\nTarget Deadline: 2026-03-10\nTags: quantum computing, reservoir computing\nCategories: Quantum Computing\nExpected Artifacts: Paper, Code, Package\nRelated Links: https://arxiv.org/pdf/2509.06873, https://arxiv.org/pdf/2409.00998, https://arxiv.org/pdf/2602.14677, https://arxiv.org/pdf/2008.08605, https://arxiv.org/pdf/2101.11020\nDataset Links: None",
+  "root_run_id": "35ef89ea-83d9-499a-8096-d47786947c65",
+  "run_id": "4ce9c625-8c51-483a-8c2c-6a18bb6d5e5f",
+  "session_id": "35ef89ea-83d9-499a-8096-d47786947c65",
+  "tags": [
+    "quantum computing",
+    "reservoir computing"
+  ],
+  "target_deadline": "2026-03-10",
+  "title": "Quantum Reservoir Computing",
+  "updated_at": "2026-03-26T02:51:19.651212+00:00"
+}

@@ -1,0 +1,53 @@
+{
+  "figures": [
+    "paper/figures/fig_hm_cf1_rank_advantage_regions.pdf",
+    "paper/figures/fig_hm_cf2_did_interaction_and_eta_optima.pdf",
+    "paper/figures/fig_hm_cf3_null_region_heatmap.pdf",
+    "paper/figures/fig_exp_sim4_channel_rank_stability.pdf"
+  ],
+  "tables": [
+    "paper/tables/tab_hm_cf1_comparator_parity_and_ci.tex",
+    "paper/tables/tab_hm_cf2_factorial_effects.tex",
+    "paper/tables/tab_hm_cf3_bound_audit.tex",
+    "paper/tables/tab_exp_sim4_channel_transfer.tex"
+  ],
+  "datasets": [
+    "paper/data/exp_sim_1_metrics.csv",
+    "paper/data/exp_sim_2_did_metrics.csv",
+    "paper/data/exp_sim_3_bound_metrics.csv",
+    "paper/data/exp_sim_4_channel_stress_metrics.csv",
+    "experiments/qrc_validation/results/dataset_manifest.json",
+    "paper/data/theorem_check_table.csv"
+  ],
+  "sympy_report": "experiments/qrc_validation/results/sympy_validation_report.txt",
+  "rasterization_checks": [
+    {
+      "figure": "paper/figures/fig_hm_cf1_rank_advantage_regions.pdf",
+      "png_preview": "experiments/qrc_validation/results/fig_hm_cf1_rank_advantage_regions.png",
+      "status": "ok"
+    },
+    {
+      "figure": "paper/figures/fig_hm_cf2_did_interaction_and_eta_optima.pdf",
+      "png_preview": "experiments/qrc_validation/results/fig_hm_cf2_did_interaction_and_eta_optima.png",
+      "status": "ok"
+    },
+    {
+      "figure": "paper/figures/fig_hm_cf3_null_region_heatmap.pdf",
+      "png_preview": "experiments/qrc_validation/results/fig_hm_cf3_null_region_heatmap.png",
+      "status": "ok"
+    },
+    {
+      "figure": "paper/figures/fig_exp_sim4_channel_rank_stability.pdf",
+      "png_preview": "experiments/qrc_validation/results/fig_exp_sim4_channel_rank_stability.png",
+      "status": "ok"
+    }
+  ],
+  "sympy_summary": {
+    "did_expression": "eta*g",
+    "utility_derivative": "-beta_t + c1 - 2*c2*eta",
+    "critical_points": [
+      "(-beta_t + c1)/(2*c2)"
+    ],
+    "bound_expression": "2*A_alpha*B*eps + A_alpha*eps**2"
+  }
+}

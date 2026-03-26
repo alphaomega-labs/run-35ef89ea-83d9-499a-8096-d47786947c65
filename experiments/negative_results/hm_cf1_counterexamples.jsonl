@@ -1,0 +1,2 @@
+{"dataset": "KMNIST", "rank": 8, "delta_vs_esn_mean": 0.09166666666666667, "delta_vs_esn_ci_lo": 0.07753472222222224, "delta_vs_esn_ci_hi": 0.11089120370370369, "delta_vs_rbf_mean": 0.017592592592592587, "delta_vs_rbf_ci_lo": -0.003703703703703709, "delta_vs_rbf_ci_hi": 0.04059027777777769}
+{"dataset": "MNIST", "rank": 8, "delta_vs_esn_mean": 0.06527777777777777, "delta_vs_esn_ci_lo": 0.04836805555555557, "delta_vs_esn_ci_hi": 0.09008101851851848, "delta_vs_rbf_mean": 0.008796296296296321, "delta_vs_rbf_ci_lo": -0.01366898148148147, "delta_vs_rbf_ci_hi": 0.03450231481481483}
